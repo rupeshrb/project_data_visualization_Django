@@ -1,0 +1,268 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Rupesh Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/vendors/iconly/bold.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/vendors/perfect-scrollbar/perfect-scrollbar.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/bootstrap-icons/bootstrap-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/app.css' %}">
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.svg' %}" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>  
+    <div id="app">
+        <div id="sidebar" class="active">
+            <div class="sidebar-wrapper active">
+                <div class="sidebar-header">
+                    <div class="d-flex justify-content-between">
+                        <div class="logo">
+                            <a href="{% url 'main:index' %}"><img src="{% static 'assets/images/logo/logo.png' %}" alt="Logo" srcset=""></a>
+                        </div>
+                        <div class="toggler">
+                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-menu">
+                    <ul class="menu">
+                        <li class="sidebar-title">Menu</li>
+
+                        <li class="sidebar-item  ">
+                            <a href="{% url 'main:index' %}" class='sidebar-link'>
+                                <i class="bi bi-grid-fill"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-stack"></i>
+                                <span>Filter</span>
+                            </a>
+                            <ul class="submenu active">
+                                <li class="submenu-item">
+                                    <a href="{% url 'main:component_Year' %}">End year / Start Year</a>
+                                </li>
+                            
+                               
+                                <li class="submenu-item ">
+                                    <a href="{% url 'main:component_Country' %}"> Country / topic / sector</a>
+                                </li>
+
+                        
+                            </ul>
+                        </li>
+                        <li class="sidebar-item active has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-stack"></i>
+                                <span>Deep Analysis</span>
+                            </a>
+                            <ul class="submenu active">
+                               
+                                <li class="submenu-item ">
+                                    <a href="{% url 'main:component_Intensity' %}">Intensity</a>
+                                </li>
+                              
+                                <li class="submenu-item active" >
+                                    <a href="{% url 'main:component_Region' %}">Region</a>
+                                </li>
+                            
+                            </ul>
+                        </li>   
+
+
+                    </ul>
+                </div>
+                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+            </div>
+        </div>
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-12 col-md-6 order-md-1 order-last">
+                            <h3>Region</h3>
+                           
+                        </div>
+                        <div class="col-12 col-md-6 order-md-2 order-first">
+                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{% url 'main:index' %}">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Intensity</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            <div class="page-content">
+                <section class="row">
+                    <div class="col-12 col-lg-9">
+                        <div class="row">
+                            <div class="col-6 col-lg-3 col-md-6">
+                                <div class="card">
+                                    <div class="card-body px-3 py-4-5">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="stats-icon purple">
+                                                    <i class="iconly-boldShow"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <h6 class="text-muted font-semibold">Total Entries</h6>
+                                                <h6 class="font-extrabold mb-0">{{ total_entries_count }}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12" >
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Region Distribution</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="region-chart" width="400" height="400"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        
+                </div>
+                </section>
+            </div>
+           
+
+
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="float-start">
+                        <p>2023 &copy; Blackcoffer </p>
+                    </div>
+                    <div class="float-end">
+                        <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
+                                href="http://ahmadsaugi.com">Rupesh Borse</a></p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="{% static 'assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+
+    <script src="{% static 'assets/vendors/apexcharts/apexcharts.js' %}"></script>
+    <script src="{% static 'assets/js/pages/dashboard.js' %}"></script>
+
+    <!-- Your previous HTML code -->
+
+<script src="{% static 'assets/js/main.js' %}"></script>
+
+
+<script>
+    // Access the data passed from the view
+    var labels = {{ labels|safe }};
+    var dataCounts = {{ data_counts|safe }};
+
+    // Function to initialize and update the Chart.js pie chart
+    function initPieChart() {
+        var ctx = document.getElementById('region-chart').getContext('2d');
+        var regionChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: dataCounts,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                    ],
+                }],
+            },
+        });
+    }
+
+    // Initialize the pie chart
+    initPieChart();
+</script>
+ <script>
+        // Access the data passed from the view for the D3.js pie chart
+        var regionData = {{ region_data_json|safe }};
+
+        // Function to initialize and update the D3.js pie chart
+        function initPieChart(data) {
+            var width = 400;
+            var height = 400;
+            var radius = Math.min(width, height) / 2;
+
+            var svg = d3.select('#region-pie-chart')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .append('g')
+                .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+
+            var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+            var pie = d3.pie()
+                .value(function(d) { return d.data_count; });
+
+            var path = d3.arc()
+                .outerRadius(radius - 10)
+                .innerRadius(0);
+
+            var label = d3.arc()
+                .outerRadius(radius - 40)
+                .innerRadius(radius - 40);
+
+            var arc = svg.selectAll('.arc')
+                .data(pie(data))
+                .enter().append('g')
+                .attr('class', 'arc');
+
+            arc.append('path')
+                .attr('d', path)
+                .attr('fill', function(d) { return color(d.data.region); });
+
+            arc.append('text')
+                .attr('transform', function(d) { return 'translate(' + label.centroid(d) + ')'; })
+                .attr('dy', '0.35em')
+                .text(function(d) { return d.data.region; });
+        }
+
+        // Initialize the D3.js pie chart with the initial data
+        initPieChart(regionData);
+    </script>
+
+</body>
+
+</html>
+
+{% endblock %}
